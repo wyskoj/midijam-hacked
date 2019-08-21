@@ -14,4 +14,4 @@ To use:
 9. Press Enter to reset the camera and F4 to stop the script.
 
 # HD Rendering
-Download the repository and inside the HD folder will be an .exe file which is set to play at 1920x1080, and a .hwf file which includes a black background and no text or progress bar.
+Download the repository and inside the HD folder will be an .exe file which is set to play at 1920x1080, and a .hwf file which includes a black background and no text or progress bar. Copy these files into your MIDIJam folder, and run `config.exe` and set the resolution to `1152x864`.
