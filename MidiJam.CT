@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="28">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>0</ID>
+      <Description>"Cam X"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Float</VariableType>
+      <Address>MidiJam.exe+6121C</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>4</ID>
+      <Description>"Cam Y"</Description>
+      <VariableType>Float</VariableType>
+      <Address>461220</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>5</ID>
+      <Description>"Cam Z"</Description>
+      <VariableType>Float</VariableType>
+      <Address>461224</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>6</ID>
+      <Description>"LookAt X"</Description>
+      <VariableType>Float</VariableType>
+      <Address>461228</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>7</ID>
+      <Description>"LookAt Y"</Description>
+      <VariableType>Float</VariableType>
+      <Address>46122c</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>8</ID>
+      <Description>"LookAt Z"</Description>
+      <VariableType>Float</VariableType>
+      <Address>00461230</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>9</ID>
+      <Description>"Song Progress (Read only)"</Description>
+      <VariableType>Float</VariableType>
+      <Address>MidiJam.exe+68EE0</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>10</ID>
+      <Description>"Playback rate (Read only)"</Description>
+      <VariableType>Float</VariableType>
+      <Address>MidiJam.exe+5E090</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>13</ID>
+      <Description>"Auto cam"</Description>
+      <VariableType>Byte</VariableType>
+      <Address>45E1A0</Address>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>al = getAddressList()
+
+camX = al.getMemoryRecordByDescription('Cam X')
+camY = al.getMemoryRecordByDescription('Cam Y')
+camZ = al.getMemoryRecordByDescription('Cam Z')
+lookX = al.getMemoryRecordByDescription('LookAt X')
+lookY = al.getMemoryRecordByDescription('LookAt Y')
+lookZ = al.getMemoryRecordByDescription('LookAt Z')
+
+speed = 1
+horizAngle = 0
+vertAngle = math.rad(90)
+
+oneDegree = math.rad(1)
+
+function checkKeys(timer)
+         if ( isKeyPressed(VK_RETURN) ) then
+            camX.Value = 0
+            camY.Value = 0
+            camZ.Value = 0
+            lookX.Value = 1
+            lookY.Value = 0
+            lookZ.Value = 0
+            horizAngle = 0
+            vertAngle = math.rad(90)
+         end
+         if ( isKeyPressed(VK_W) ) then
+            camZ.Value = camZ.Value + (speed * yCompFromAngle(horizAngle))
+            lookZ.Value = lookZ.Value + (speed * yCompFromAngle(horizAngle))
+            camX.Value = camX.Value + (speed * xCompFromAngle(horizAngle))
+            lookX.Value = lookX.Value + (speed * xCompFromAngle(horizAngle))
+         end
+         if ( isKeyPressed(VK_S) ) then
+            camZ.Value = camZ.Value - (speed * yCompFromAngle(horizAngle))
+            lookZ.Value = lookZ.Value - (speed * yCompFromAngle(horizAngle))
+            camX.Value = camX.Value - (speed * xCompFromAngle(horizAngle))
+            lookX.Value = lookX.Value - (speed * xCompFromAngle(horizAngle))
+         end
+         if ( isKeyPressed(VK_A) ) then
+            camZ.Value = camZ.Value + (speed * yCompFromAngle(horizAngle - math.rad(90)))
+            lookZ.Value = lookZ.Value + (speed * yCompFromAngle(horizAngle - math.rad(90)))
+            camX.Value = camX.Value + (speed * xCompFromAngle(horizAngle - math.rad(90)))
+            lookX.Value = lookX.Value + (speed * xCompFromAngle(horizAngle - math.rad(90)))
+         end
+         if ( isKeyPressed(VK_D) ) then
+            camZ.Value = camZ.Value - (speed * yCompFromAngle(horizAngle - math.rad(90)))
+            lookZ.Value = lookZ.Value - (speed * yCompFromAngle(horizAngle - math.rad(90)))
+            camX.Value = camX.Value - (speed * xCompFromAngle(horizAngle - math.rad(90)))
+            lookX.Value = lookX.Value - (speed * xCompFromAngle(horizAngle - math.rad(90)))
+         end
+         if ( isKeyPressed(VK_E) ) then
+            camY.Value = camY.Value + speed
+            lookY.Value = lookY.Value + speed
+         end
+         if ( isKeyPressed(VK_Q) ) then
+            camY.Value = camY.Value - speed
+            lookY.Value = lookY.Value - speed
+         end
+
+         if ( isKeyPressed(VK_NUMPAD6) ) then
+            horizAngle = horizAngle + oneDegree
+            lookX.Value = camX.Value + xCompFromAngle(horizAngle)
+            lookZ.Value = camZ.Value + yCompFromAngle(horizAngle)
+         end
+         if ( isKeyPressed(VK_NUMPAD4) ) then
+            horizAngle = horizAngle - oneDegree
+            lookX.Value = camX.Value + xCompFromAngle(horizAngle)
+            lookZ.Value = camZ.Value + yCompFromAngle(horizAngle)
+         end
+         if ( isKeyPressed(VK_NUMPAD8) ) then
+            if (vertAngle - oneDegree &gt; 0) then
+            vertAngle = vertAngle - oneDegree
+            end
+            lookY.Value = camY.Value + xCompFromAngle(vertAngle)
+            lookX.Value = camX.Value + yCompFromAngle(vertAngle) * xCompFromAngle(horizAngle)
+            lookZ.Value = camZ.Value + yCompFromAngle(vertAngle) * yCompFromAngle(horizAngle)
+         end
+         if ( isKeyPressed(VK_NUMPAD5) ) then
+            if (vertAngle + oneDegree &lt; (math.pi - 0.001)) then
+            vertAngle = vertAngle + oneDegree
+            end
+            lookY.Value = camY.Value + xCompFromAngle(vertAngle)
+            lookX.Value = camX.Value + yCompFromAngle(vertAngle) * xCompFromAngle(horizAngle)
+            lookZ.Value = camZ.Value + yCompFromAngle(vertAngle) * yCompFromAngle(horizAngle)
+         end
+
+--         if ( isKeyPressed(VK_NUMPAD8) ) then
+--           vertAngle = vertAngle + 1
+--           look
+--         end
+
+         if ( isKeyPressed(VK_SHIFT) ) then
+            speed = 2
+         elseif ( isKeyPressed(VK_CONTROL) ) then
+            speed = 0.1
+         else
+            speed = 1
+         end
+end
+
+
+function xCompFromAngle(angle)
+         return math.cos(angle)
+end
+
+function yCompFromAngle(angle)
+         return math.sin(angle)
+end
+
+function round(n)
+    return n % 1 &gt;= 0.5 and math.ceil(n) or math.floor(n)
+end
+
+
+t=createTimer(nil)
+timer_setInterval(t, 10)
+timer_onTimer(t, checkKeys)
+timer_setEnabled(t, true)
+
+createHotkey(function () timer_setEnabled(t, false) end, VK_F4)
+</LuaScript>
+</CheatTable>
